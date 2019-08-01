@@ -1,0 +1,36 @@
+{% load static thumbnail %}
+<li class="list-group-item">
+  <div class="input-group">
+    <textarea class="form-control post-reply-message" aria-label="With textarea"></textarea>
+    <button type="button" class="btn btn-primary post-reply" uuid="{{ uuid }}">发布评论</button>
+  </div>
+</li>
+<li class="list-group-item" >
+  <span>全部回复（{{ reply_num }}）</span>
+</li>
+
+{% for reply in reply_list %}
+<li class="list-group-item">
+  <div class="shadow-sm p-3 mb-5 bg-white rounded" circle-id="{{ reply.uuid }}">
+        {% thumbnail reply.user.picture "x20" as im %}
+            <img src="{{ im.url }}" alt="用户头像">
+        {% empty %}
+            <img src="{% static 'img/user.png' %}" height="180px" alt="没有头像"/>
+        {% endthumbnail %}
+        <span>{{ reply.user.name }}</span>
+        {% if reply.user == request.user %}
+        <p class="my-delete-circle move-hand"><span>删除</span></p>
+        {% endif %}
+        <div><span>&nbsp</span></div>
+        <p class="text-justify">{{ reply.context }}</p>
+        {% if request.user in reply.get_like_people %}
+          <i class="zi zi_loves like-symbol"></i>
+        {% else %}
+          <i class="zi zi_love move-hand like-symbol"></i>
+        {% endif %}
+        <span class="like-num">{% if reply.get_like_num > 0 %}{{ reply.get_like_num }}{% else %}0{% endif %}</span>
+        <span>&nbsp&nbsp&nbsp</span>
+        <p class="my-release-time"><span>评论于{{ reply.create_time }}</span></p>
+  </div>
+</li>
+{% endfor %}

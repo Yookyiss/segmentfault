@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static comments i18n thumbnail compress crispy_forms_tags%}
+{% block title %}Article{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="col-md-12">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'article:list' %}">文章</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ article.title }}</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="col-md-12">
+    <div class="row">
+      <div class="offset-md-4">
+        <h2>{{ article.title|title }}</h2>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="offset-md-2 col-md-8">
+      {% if request.user == article.user %}
+      <div style="float: right;color: dodgerblue;font-size: 15px"><a href="{% url 'article:update' article.id %}">编辑</a></div>
+      <p>&nbsp;</p>
+
+      {% endif %}
+    <hr>
+      {% thumbnail article.image "1920x1080" crop="center" as im %}
+        <img class="img-fluid" src="{{ im.url }}" alt="Card image cap">
+        {% empty %}
+        <img src="{% static 'img/user.png' %}" height="180px" alt="没有头像"/>
+      {% endthumbnail %}
+      <hr>
+      {{ article.get_makdown_html|safe}}
+      <div style="float: right;font-size: 14px;color:#ccc">
+        {{ article.user }}发表于{{ article.update_time }}
+      </div>
+      <p>&nbsp</p>
+      <hr>
+
+
+      {#   django-comments-from  区域 #}
+      {% if user.is_authenticated %}
+          {% get_comment_form for article as form %}
+          <form action="{% comment_form_target %}" method="POST">
+          {% csrf_token %}
+          <div class="card">
+            <div class="card-header">
+              写个评论吧
+            </div>
+            <div class="card-body">
+              <textarea class="form-control" name="comment" rows="7" maxlength="3000" required="" id="id_comment"></textarea>
+              <p></p>
+              <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+          </div>
+          {{ form.content_type }}
+          {{ form.object_pk }}
+          {{ form.timestamp }}
+          {{ form.security_hash }}
+          {#     重定向       #}
+          <input type="hidden" name="next" value="{% url 'article:detail' article.id %}">
+          </form>
+      {% else %}
+          <p>Please <a href="">log in</a> to leave a comment.</p>
+      {% endif %}
+      <p>&nbsp;</p>
+
+      {#   django-comments 区域  #}
+      {% get_comment_list for article as comment_list %}
+      {% for comment in comment_list %}
+
+          <div class="media">
+            {% thumbnail comment.user.picture "x50" as im %}
+                <img class="mr-3" src="{{ im.url }}" alt="Generic placeholder image">
+            {% empty %}
+                <img src="{% static 'img/user.png' %}" height="180px" alt="没有头像"/>
+            {% endthumbnail %}
+
+            <div class="media-body">
+              <h5 class="mt-0">{{ comment.user }}</h5>
+              {{ comment.comment }}
+            </div>
+          </div>
+              <p>&nbsp;</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+
+
+
+

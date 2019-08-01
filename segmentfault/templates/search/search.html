@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static comments i18n thumbnail compress crispy_forms_tags%}
+{% block title %}Search{% endblock %}
+{% block content %}
+  <div class="row">
+    <div class="col-md-3">
+      <div class="list-group">
+        <a href="?q={{ form.data.q }}" class="list-group-item list-group-item-action {% if not form.data.models %}active{% endif %}">
+          全部
+        </a>
+        <a href="?q={{ form.data.q }}&models=qa.question" class="list-group-item list-group-item-action {% if form.data.models == 'qa.question' %}active{% endif %}">问答</a>
+        <a href="?q={{ form.data.q }}&models=article.article" class="list-group-item list-group-item-action {% if form.data.models == 'article.article' %}active{% endif %}">文章</a>
+        <a href="?q={{ form.data.q }}&models=circle.circlemessage" class="list-group-item list-group-item-action {% if form.data.models == 'circle.circlemessage' %}active{% endif %}">圈子</a>
+        <a href="?q={{ form.data.q }}&models=users.user" class="list-group-item list-group-item-action {% if form.data.models == 'users.user' %}active{% endif %}">用户</a>
+      </div>
+    </div>
+  <div class="col-md-9">
+
+
+    {% if query %}
+        {% for result in page.object_list %}
+
+            <div class="row">
+            {% if result.app_label == 'article' %}
+              <div class="media">
+                <div class="media-body">
+                  <h5 class="mt-0">文章:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{ result.object.get_abspath }}" style="color: dodgerblue">{{ result.object.title }}</a></h5>
+                  {{ result.object.content|safe|truncatechars_html:90 }}
+                </div>
+              </div>
+            {% elif result.app_label == 'users' %}
+              <div class="media">
+                {% thumbnail result.object.picture "50x50" crop="center" as im %}
+                <img class="mr-3" src="{{ im.url }}" alt="Generic placeholder image">
+                {% empty %}
+                <img src="{% static 'img/user.png' %}" height="180px" alt="没有头像"/>
+                {% endthumbnail %}
+                <div class="media-body">
+                  <h6 class="mt-0"><a href="{{ result.object.get_absolute_url }}" style="color: dodgerblue">{{ result.object.name }}</a>@{{ result.object.name }}</h6>
+                  总得票数：{{ result.object.gain_votes }}
+                </div>
+              </div>
+            {% elif result.app_label == 'circle' %}
+              <div class="media">
+                <div class="media-body">
+                  <h5 class="mt-0">圈子动态</h5>
+                  {{ result.object.context }}
+                </div>
+              </div>
+            {% elif result.app_label == 'qa' %}
+              <div class="media">
+                <div class="media-body">
+                  <h5 class="mt-0">问答:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{ result.object.get_abspath }}" style="color: dodgerblue">{{ result.object.title }}</a></h5>
+                  {{ result.object.content|safe|truncatechars_html:90 }}
+                </div>
+              </div>
+            {% endif %}
+            </div>
+          <hr>
+        {% empty %}
+            <p>没有搜索结果。</p>
+        {% endfor %}
+
+        {% if page.has_previous or page.has_next %}
+            <div>
+                {% if page.has_previous %}<a href="?q={{ query }}&page={{ page.previous_page_number }}">{% endif %}« 上一页{% if page.has_previous %}</a>{% endif %}
+                |
+                {% if page.has_next %}<a href="?q={{ query }}&page={{ page.next_page_number }}">{% endif %}下一页 »{% if page.has_next %}</a>{% endif %}
+            </div>
+        {% endif %}
+    {% else %}
+        {# Show some example queries to run, maybe query syntax, something else? #}
+    {% endif %}
+  </div>
+  </div>
+{% endblock %}

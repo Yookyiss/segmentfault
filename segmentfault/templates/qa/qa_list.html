@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static i18n thumbnail compress%}
+{% block title %}Q&A{% endblock %}
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-9">
+      <p> </p>
+
+    <a href="{% url 'qa:create' %}" class="btn btn-primary">发起提问</a>
+    <p> </p>
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link {% if active == 'new' %}active{% endif %}" href="{% url 'qa:new' %}">最新问答</a>
+        </li>
+{#        <li class="nav-item">#}
+{#          <a class="nav-link {% if active == 'subscribed' %}active{% endif %}" href="">为我推送</a>#}
+{#        </li>#}
+        <li class="nav-item">
+          <a class="nav-link {% if active == 'unanswered' %}active{% endif %}" href="{% url 'qa:unanswerd' %}">等待回答</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if active == 'hottest' %}active{% endif %}" href="{% url 'qa:hottest' %}">热门问答</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if active == 'pay' %}active{% endif %}" href="#">付费问答</a>
+        </li>
+
+        </ul>
+      {#   问题区域   #}
+      <ul class="list-group list-group-flush">
+      {% include 'qa/qa_single.html' %}
+      </ul>
+      <p></p>
+    {% include 'pagination.html' %}
+    {# end 问题区域   #}
+    </div>
+    <div class="col-md-3">
+
+      <div class="row">
+        <div class="card border-dark mb-3" style="max-width: 20rem;">
+          <div class="card-header">排行榜</div>
+          <div class="card-body text-info">
+            <p class="card-text">
+            {% for name,times in rank %}
+            <div class="media">
+              <div class="media-body">
+                {{ name }}&nbsp;&nbsp;&nbsp;{{ times }}次被采纳
+              </div>
+            </div>
+            {% endfor %}
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+
+
+{% endblock %}
+
+
+
+

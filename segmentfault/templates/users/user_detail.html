@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static thumbnail%}
+
+{% block title %}User: {{ object.username }}{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+      <h2>暂时使用简易版个人中心，V2.0版本会对其前端页面进行更新</h2>
+      <p>用户名：{{ object.username }}</p>
+      {% if object.name %}
+        <p>昵称：{{ object.name }}</p>
+        <p>城市：{{ object.city }}</p>
+        <p>年龄：{{ object.age }}</p>
+        <p>公司：{{ object.company }}</p>
+        {% thumbnail object.picture "x70" as im %}
+            <img src="{{ im.url }}" alt="用户头像">
+        {% empty %}
+            <img src="{% static 'img/user.png' %}" height="180px" alt="没有头像"/>
+        {% endthumbnail %}
+        <p></p>
+        {% if request.user != object %}<div><a class="btn btn-primary" href="{% url 'msg:letter' object.id %}" role="button">发起私信</a></div>{% endif %}
+      {% endif %}
+
+    </div>
+  </div>
+
+{% if object == request.user %}
+<!-- Action buttons -->
+<div class="row">
+
+  <div class="col-sm-12">
+    <a class="btn btn-primary" href="{% url 'users:update' %}" role="button">个人信息</a>
+    <a class="btn btn-primary" href="{% url 'account_email' %}" role="button">邮箱地址</a>
+    <!-- Your Stuff: Custom user template urls -->
+  </div>
+
+</div>
+<!-- End Action buttons -->
+{% endif %}
+
+
+</div>
+{% endblock content %}
+

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load static i18n thumbnail compress %}
+{% block title %}CirCle{% endblock %}
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="offset-md-2 col-md-8">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">发布动态</button>
+      <hr class="append-single-hr">
+    {% for circle in circle_list %}
+      {% include 'circle/circle_single.html' %}
+    {% endfor %}
+    {% include "pagination.html" %}
+    </div>
+  </div>
+</div>
+
+
+{#--此处为发表动态模态框--#}
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="circle-form" role="form" action="#" method="post" onsubmit="return false">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="message-text" class="col-form-label ttt">Message:</label>
+            <textarea class="form-control" id="message-text" name="message"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary circle-post-btn" data-dismiss="modal">Send message</button>
+      </div>
+    </div>
+  </div>
+</div>
+{#此处为评论区模态框#}
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group list-group-flush" id="reply-list">
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block javascript %}
+
+      <!-- Bootstrap JS and its dependencies-->
+      <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+      <script src="{% static 'js/popper.min.js' %}"></script>
+      <script src="{% static 'bootstrap-4.3.1-dist/js/bootstrap.min.js' %}"></script>
+      <!-- Your stuff: Third-party javascript libraries go here -->
+      <!-- place project specific Javascript in this file -->
+      {% compress js %}
+      <script src="{% static 'js/circle.js' %}"></script>
+      {% endcompress %}
+
+{% endblock javascript %}

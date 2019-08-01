@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static i18n thumbnail compress%}
+{% block title %}Q&A{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <p></p>
+      {#  面包屑导航    #}
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'qa:new' %}">问答</a></li>
+          <li class="breadcrumb-item active" aria-current="page">{{ question.title }}</li>
+        </ol>
+      </nav>
+      {# end面包屑导航 #}
+    </div>
+    <div class="col-md-12">
+      <h3>{{ question.title }}<a class="btn btn-primary" href="{% url 'qa:create' %}" role="button" style="float: right">发起提问</a></h3>
+    </div>
+  </div>
+  <p> </p>
+  <div class="row">
+    <div class="col-md-1">
+      <p hidden class="qa-accept">{{ question.has_accept }}</p>
+      <div class="row" style="cursor: pointer;" qa-id="{{ question.id }}">
+      <svg t="1563277852376" nature='{% if user_vote == 1 %}active{% else %}none{% endif %}' class="icon up-vote" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2858" width="50" height="50"><path d="M860.553846 748.307692H163.446154c-19.692308 0-33.476923-25.6-17.723077-43.323077l340.676923-417.476923c11.815385-15.753846 37.415385-15.753846 49.230769 0l344.615385 417.476923c13.784615 17.723077 1.969231 43.323077-19.692308 43.323077z" p-id="2859" fill="{% if user_vote == 1 %}#1afa29{% else %}#bfbfbf{% endif %}"></path></svg>
+      </div>
+      <div class="row vote-nums" >
+        <div class="col-md-7" style="text-align: center">
+          {{ question.get_votes }}
+        </div>
+
+      </div>
+      <div class="row" style="cursor: pointer;" qa-id="{{ question.id }}">
+      <svg t="1563278593935" nature='{% if user_vote == 1 %}active{% else %}none{% endif %}' class="icon down-vote" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4350" width="50" height="50"><path d="M163.446154 275.692308h697.107692c19.692308 0 33.476923 25.6 17.723077 43.323077L537.6 736.492308c-11.815385 15.753846-37.415385 15.753846-49.230769 0L143.753846 319.015385c-13.784615-17.723077-1.969231-43.323077 19.692308-43.323077z" p-id="4351" fill="{% if user_vote == 0 %}#515151{% else %}#bfbfbf{% endif %}"></path></svg>
+      </div>
+    </div>
+
+    <div class="col-md-11">
+      {{ question.get_markdown|safe }}
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <a class="btn btn-primary" href="{% url "qa:reply" question.id %}" role="button">发表回复</a>
+      <span style="float: right;"><a href="#">{{ question.user.name }}</a>发布于{{ question.create_time }}</span>
+    </div>
+  </div>
+  {% include 'qa/qa_answer.html' %}
+
+</div>
+{% endblock %}
+{% block javascript %}
+   <!-- Bootstrap JS and its dependencies-->
+      <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+      <script src="{% static 'js/popper.min.js' %}"></script>
+      <script src="{% static 'bootstrap-4.3.1-dist/js/bootstrap.min.js' %}"></script>
+      <!-- Your stuff: Third-party javascript libraries go here -->
+      <script type="text/javascript">
+      // 设置csrf
+      $.ajaxSetup({
+          data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+      });
+      </script>
+
+      <!-- place project specific Javascript in this file -->
+      {% compress js %}
+      <script src="{% static 'js/qa.js' %}"></script>
+      {% endcompress %}
+{% endblock %}

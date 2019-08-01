@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static i18n thumbnail compress%}
+{% block title %}MSG{% endblock %}
+{% block content %}
+  <div class="row" style="height: 10px;">
+    <div class="col-md-3 ">
+      <div class="list-group">
+        {% for user in all_users %}
+        <a href="{% url 'msg:letter' user.id %}" class="list-group-item list-group-item-action {% if user.id == recipient %}active active-user{% endif %}" user-name="{{ user.username }}">
+          {% thumbnail user.picture "40x40" crop="center" as im %}
+          <img class="mr-3" src="{{ im.url }}" alt="Generic placeholder image">
+          {% empty %}
+          <img src="{% static 'img/user.png' %}" height="180px" alt="没有头像"/>
+          {% endthumbnail %}
+          {{ user }}{{ user.id }}{{ recipient }}
+        </a>
+        {% endfor %}
+
+
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div class="card " >
+        <div style="display:none"></div>
+        <div class="card-body">
+          <div style="height: 600px;" class="pre-scrollable">
+            <div hidden recipient-id="{{ recipient }}" id="recipient"></div>
+            {% for message in message_list %}
+              <div class="media">
+
+                {% thumbnail message.sender.picture "40x40" crop="center" as im %}
+                <img class="mr-3" src="{{ im.url }}" alt="Generic placeholder image">
+                {% empty %}
+                <img src="{% static 'img/user.png' %}" height="180px" alt="没有头像"/>
+                {% endthumbnail %}
+
+                <div class="media-body">
+                  <div style="font-size: 14px">{{ message.create_time }}</div>
+                  {{ message.message }}
+                </div>
+              </div>
+              <p></p>
+            {% endfor %}
+          </div>
+        </div>
+
+      </div>
+      <p></p>
+      <div class="input-group mb-3">
+        <input type="text" class="form-control reply-input" placeholder="点击输入消息" aria-label="Recipient's username" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary send-letter"  type="button">发送</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+
+{% block javascript %}
+
+      <!-- Bootstrap JS and its dependencies-->
+      <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+      <script src="{% static 'js/popper.min.js' %}"></script>
+      <script src="{% static 'bootstrap-4.3.1-dist/js/bootstrap.min.js' %}"></script>
+      <!-- Your stuff: Third-party javascript libraries go here -->
+      <script type="text/javascript">
+      $.ajaxSetup({
+          data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+      });
+      </script>
+
+
+      <!-- place project specific Javascript in this file -->
+      <script type="text/javascript">
+          const currentUser = "{{ request.user.username }}";
+      </script>
+      {% compress js %}
+      <script src="{% static 'js/private-letter.js' %}"></script>
+      {% endcompress %}
+
+{% endblock javascript %}

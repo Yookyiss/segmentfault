@@ -1,0 +1,26 @@
+{% load static thumbnail %}
+<div class="shadow-sm p-3 mb-5 bg-white rounded" circle-id="{{ circle.uuid }}">
+      {% thumbnail circle.user.picture "x30" as im %}
+          <img src="{{ im.url }}" alt="用户头像">
+      {% empty %}
+          <img src="{% static 'img/user.png' %}" height="180px" alt="没有头像"/>
+      {% endthumbnail %}
+      <span style="color: black;">{{ circle.user.name }}</span>
+      {% if circle.user == request.user %}
+      <p class="my-delete-circle move-hand"><span>删除</span></p>
+      {% endif %}
+      <hr>
+      <p class="text-justify">{{ circle.context }}</p>
+      {% if request.user in circle.get_like_people %}
+        <i class="zi zi_loves like-symbol" style="color: black"></i>
+      {% else %}
+        <i class="zi zi_love move-hand like-symbol" style="color: black"></i>
+      {% endif %}
+      <span class="like-num" style="color: black">{% if circle.get_like_num > 0 %}{{ circle.get_like_num }}{% else %}0{% endif %}</span>
+      <span>&nbsp&nbsp&nbsp</span>
+      <button type="button" class="btn reply" data-toggle="modal" data-target="#exampleModalLong">
+        <i class="zi zi_commentalt move-hand" style="color: black"></i>
+      </button>
+      <span class="reply-num" style="color: black">{% if circle.get_comment_num > 0 %}{{ circle.get_comment_num }}{% endif %}</span>
+      <p class="my-release-time"><span>发表于{{ circle.create_time }}</span></p>
+</div>

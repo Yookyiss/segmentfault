@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static i18n thumbnail compress cache%}
+{% block title %}Article{% endblock %}
+{% block content %}
+<div class="container">
+<div class="row">
+  <div class="col-md-12">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">首页</a></li>
+        <li class="breadcrumb-item"><a href="#">文章</a></li>
+      </ol>
+    </nav>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-9">
+      <ul class="list-unstyled">
+      {% for article in article_list %}
+      {% include "article/article_single.html" %}
+      {% endfor %}
+      </ul>
+  </div>
+  <div class="col-md-3">
+    <div class="shadow p-3 mb-5 bg-white rounded">
+      <div class="offset-md-1">
+        <a href="{% url 'article:create' %}" role="button" class="btn btn-primary">
+          <i class="zi zi_write">写文章</i>
+        </a>
+        <a href="{% url 'article:drafts' %}" role="button" class="btn btn-primary">
+          <i class="zi zi_box">草稿箱</i>
+        </a>
+      </div>
+    </div>
+
+    <hr>
+    <div class="list-group">
+      <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">推荐文章</h5>
+        </div>
+      </a>
+      {% cache 3600 sidebar%}
+      {% for article in hot_article %}
+      <a href="{{ article.get_abspath }}" class="list-group-item list-group-item-action flex-column align-items-start">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">{{ article.title }}</h5>
+        </div>
+        <small class="text-muted">{{ article.user }}发布于{{ article.create_time }}</small>
+      </a>
+      {% endfor %}
+      {% endcache %}
+    </div>
+  </div>
+</div>
+</div>
+
+{% include "pagination.html" %}
+
+
+{% endblock %}

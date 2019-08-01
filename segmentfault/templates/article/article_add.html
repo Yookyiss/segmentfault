@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static i18n thumbnail compress crispy_forms_tags%}
+{% block title %}Article{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+    <div class="offset-md-1 col-md-10">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item"><a href="#">Library</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Data</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="offset-md-1 col-md-10">
+      <form method="POST" action="" enctype="multipart/form-data">
+          {% csrf_token %}
+{#          使用crispy进行对widget的渲染#}
+        {{ form|crispy }}
+        {{ form.tag }}
+          <button type="submit" class="btn btn-primary">Submit</button>
+        {{ form.media }}
+      </form>
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block javascript %}
+
+      <!-- Bootstrap JS and its dependencies-->
+      <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+      <script src="{% static 'js/popper.min.js' %}"></script>
+      <script src="{% static 'bootstrap-4.3.1-dist/js/bootstrap.min.js' %}"></script>
+      <!-- Your stuff: Third-party javascript libraries go here -->
+
+
+      <!-- place project specific Javascript in this file -->
+      {% compress js %}
+      <script src="{% static 'js/article.js' %}"></script>
+      {% endcompress %}
+
+{% endblock javascript %}

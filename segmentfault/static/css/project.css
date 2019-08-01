@@ -1,0 +1,41 @@
+/* These styles are generated from project.scss. */
+
+.alert-debug {
+  color: black;
+  background-color: white;
+  border-color: #d6e9c6;
+}
+
+.alert-error {
+  color: #b94a48;
+  background-color: #f2dede;
+  border-color: #eed3d7;
+}
+
+.my-release-time{
+  font-size: 12px;
+  color: #ccc;
+  float: right;
+}
+
+.my-delete-circle{
+  font-size: 15px;
+  color: red;
+  float: right;
+}
+.move-hand{
+  cursor: pointer;
+}
+
+.del-article{
+
+}
+.edit-article{
+  color: dodgerblue;
+  font-size: 15px;
+  float: right;
+
+}
+body{
+  background-color: #f6f6f6;
+}

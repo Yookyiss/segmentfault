@@ -1,0 +1,18 @@
+{% load thumbnail static %}
+<div class="col-md-12">
+
+</div>
+<div class="card w-100" style="width: 18rem;">
+  {% thumbnail article.image "1920x1080" crop="center" as im %}
+  <img class="card-img-top" src="{{ im.url }}" alt="Card image cap">
+  {% empty %}
+  <img src="{% static 'img/user.png' %}" height="180px" alt="没有头像"/>
+  {% endthumbnail %}
+  <div class="card-body">
+    <h5 class="card-title">{{ article.title }}</h5>
+    <p class="card-text"> </p>
+    <a href="{% url 'article:detail' article.id %}" class="btn btn-primary">查看文章</a>
+    <span style="float:right;">{{ article.user }}发表于{{ article.create_time }}</span>
+  </div>
+</div>
+<p></p>

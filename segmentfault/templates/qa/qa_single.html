@@ -1,0 +1,32 @@
+{% for q in questions_list %}
+<li class="list-group-item">
+  <div class="row">
+    <div class="col-md-4">
+      <button type="button" class="btn btn-outline-info" disabled>
+        <p style="margin: 0px">{{ q.get_votes }}</p>
+        <p style="margin: 0px">投票</p>
+      </button>
+      <span>&nbsp;</span>
+      <button type="button" class="btn {% if q.has_accept %}btn-success{% else %}btn-outline-info{% endif %}" disabled>
+        <p style="margin: 0px">{{ q.get_answernum }}</p>
+        <p style="margin: 0px">{% if q.has_accept %}采纳{% else %}回答{% endif %}</p>
+      </button>
+      <span>&nbsp;</span>
+      <button type="button" class="btn btn-outline-info" disabled>
+        <p style="margin: 0px">{{ q.visited_num }}</p>
+        <p style="margin: 0px">浏览</p>
+      </button>
+
+    </div>
+    <div class="col-md-8">
+      <div class="media">
+        <div class="media-body">
+          <span style="color: #ccc;font-size: 15px"><a href="" style="color: #ccc">{{ q.user.name }}</a>&nbsp;&nbsp;&nbsp;&nbsp;提问于{{ q.create_time|timesince }}前</span>
+          <h5 class="mt-0"><a href="{% url 'qa:detail' q.id %}" style="color: black">{{ q.title|safe|truncatechars_html:20 }}</a></h5>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</li>
+{% endfor %}

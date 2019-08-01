@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static i18n thumbnail compress%}
+{% block title %}Article{% endblock %}
+{% block content %}
+<div class="container">
+<div class="row">
+  <div class="col-md-12">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">首页</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'article:list' %}">文章</a></li>
+                <li class="breadcrumb-item active" aria-current="page">草稿箱</li>
+
+      </ol>
+    </nav>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-9">
+      <ul class="list-unstyled">
+      {% for article in article_list %}
+
+          <div class="media">
+          <a href="{% url 'article:detail' article.id %}">
+            {% thumbnail article.image "100x100" crop="center" as im %}
+              <img class="mr-3" src="{{ im.url }}" alt="Generic placeholder image">
+              {% empty %}
+              <img src="{% static 'img/user.png' %}" height="180px" alt="没有头像"/>
+            {% endthumbnail %}
+          </a>
+            <div class="media-body">
+              <h3 class="mt-0">{{ article.title }}</h3>
+              最后编辑于{{ article.update_time }}
+            </div>
+          </div>
+
+
+      {% endfor %}
+      </ul>
+  </div>
+  <div class="col-md-3">
+    <div class="shadow p-3 mb-5 bg-white rounded">
+      <div class="offset-md-1">
+        <a href="{% url 'article:create' %}" role="button" class="btn btn-primary">
+          <i class="zi zi_write">写文章</i>
+        </a>
+        <a href="{% url 'article:drafts' %}" role="button" class="btn btn-primary">
+          <i class="zi zi_box">草稿箱</i>
+        </a>
+      </div>
+    </div>
+
+    <hr>
+  </div>
+</div>
+</div>
+
+{% include "pagination.html" %}
+
+
+{% endblock %}

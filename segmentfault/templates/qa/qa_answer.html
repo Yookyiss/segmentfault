@@ -1,0 +1,46 @@
+{% load thumbnail static %}
+
+
+{% for answer in answer_list %}
+<p> </p>
+  <p>&nbsp;</p>
+
+<div class="row">
+
+<div class="col-md-1">
+  <div class="row" style="cursor: pointer;" qa-id="{{ answer.id }}">
+  <svg t="1563277852376" nature='{% if request.user.id in answer.get_upvote_users %}active{% else %}none{% endif %}' class="icon answer-up-vote" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2858" width="40" height="40"><path d="M860.553846 748.307692H163.446154c-19.692308 0-33.476923-25.6-17.723077-43.323077l340.676923-417.476923c11.815385-15.753846 37.415385-15.753846 49.230769 0l344.615385 417.476923c13.784615 17.723077 1.969231 43.323077-19.692308 43.323077z" p-id="2859" fill="{% if request.user.id in answer.get_upvote_users %}#1afa29{% else %}#bfbfbf{% endif %}"></path></svg>
+  </div>
+  <div class="row" qa-id="{{ answer.id }}">
+    <div class="col-md-4 vote-nums" style="text-align: center">
+      {{ answer.get_votes }}
+    </div>
+    <div class="col-md-5 answer-accept" style="cursor: pointer;">
+      {% if request.user == question.user %}
+      <svg t="1563360634378" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6808" width="30" height="30"><path d="M0 512C0 229.234759 229.234759 0 512 0s512 229.234759 512 512-229.234759 512-512 512S0 794.765241 0 512z m419.310345 194.630621a35.310345 35.310345 0 0 0 49.399172 1.271172l335.518897-311.931586a35.310345 35.310345 0 0 0-48.075035-51.729655l-309.124413 289.544827-145.125518-149.645241a35.310345 35.310345 0 1 0-50.688 49.169655l168.112552 173.320828z" p-id="6809" fill="{% if not answer.is_accept %}#cdcdcd{% else %}#1296db{% endif %}"></path></svg>
+      {% endif %}
+    </div>
+
+  </div>
+  <div class="row" style="cursor: pointer;" qa-id="{{ answer.id }}">
+  <svg t="1563278593935" nature='{% if request.user.id in answer.get_downvote_users %}active{% else %}none{% endif %}' class="icon answer-down-vote" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4350" width="40" height="40"><path d="M163.446154 275.692308h697.107692c19.692308 0 33.476923 25.6 17.723077 43.323077L537.6 736.492308c-11.815385 15.753846-37.415385 15.753846-49.230769 0L143.753846 319.015385c-13.784615-17.723077-1.969231-43.323077 19.692308-43.323077z" p-id="4351" fill="{% if request.user.id in answer.get_downvote_users %}#515151{% else %}#bfbfbf{% endif %}"></path></svg>
+  </div>
+</div>
+<div class="col-md-push-11">
+  <p> </p>
+  <div class="media">
+    {% thumbnail answer.user.picture "50x50" crop="center" as im %}
+    <img class="mr-3" src="{{ im.url }}" alt="Generic placeholder image">
+    {% empty %}
+    <img src="{% static 'img/user.png' %}" height="180px" alt="没有头像"/>
+    {% endthumbnail %}
+    <div class="media-body">
+      <h6 class="mt-0"><a href="" style="color: #1b1e21;">{{ answer.user.name }}</a></h6>
+      {{ answer.get_markdown|safe }}
+    </div>
+  </div>
+</div>
+</div>
+
+
+{% endfor %}

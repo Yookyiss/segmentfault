@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load thumbnail static%}
+{% block content%}
+
+<div class="row">
+  <div class="offset-md-2 col-md-8">
+    <div class="card">
+      <div class="card-header">
+        消息通知
+      </div>
+      <div class="card-body">
+        <a href="{% url 'notice:readall' %}" class="btn btn-primary">全部标为已读</a>
+      <p></p>
+        {% for i in notice_list %}
+          <div class="row">
+          <div class="col-md-9">
+            <div class="media">
+              {% thumbnail i.sender.picture "40x40" crop="center" as im %}
+              <img class="mr-3" src="{{ im.url }}" alt="Generic placeholder image">
+              {% empty %}
+              <img src="{% static 'img/user.png' %}" height="180px" alt="没有头像"/>
+              {% endthumbnail %}
+              <div class="media-body">
+                <h5 class="mt-0">{{ i.sender }}在{{ i.create_time }}{{ i.get_verb_display }}你的：</h5>
+                {{ i.content_object|safe|truncatechars_html:40 }} ...
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            {% if not i.is_read %}
+              未读
+            {% endif %}
+          </div>
+
+          </div>
+
+          <p></p>
+        {% endfor %}
+
+      </div>
+    </div>
+  <p></p>
+  {% include 'pagination.html' %}
+  </div>
+</div>
+
+{% endblock %}
+

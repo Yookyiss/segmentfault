@@ -1,0 +1,206 @@
+{% load static i18n compress thumbnail%}<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>{% block title %}segmentfault{% endblock title %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+
+    <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}">
+
+    {% block css %}
+    
+    <!-- Latest compiled and minified` Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'bootstrap-4.3.1-dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/zico.min.css' %}">
+    <link href="{% static 'css/project.css' %}" rel="stylesheet">
+
+    <!-- Your stuff: Third-party CSS libraries go here -->
+    {% compress css %}
+    <!-- This file stores project-specific CSS -->
+    
+
+    
+    {% endcompress %}
+    {% endblock %}
+
+  </head>
+
+  <body>
+
+{#    <div class="mb-1">#}
+{#      <nav class="navbar navbar-expand-md navbar-light bg-light">#}
+{#        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">#}
+{#          <span class="navbar-toggler-icon"></span>#}
+{#        </button>#}
+{#        <a class="navbar-brand" href="{% url 'home' %}">segmentfault</a>#}
+{##}
+{#        <div class="collapse navbar-collapse" id="navbarSupportedContent">#}
+{#          <ul class="navbar-nav mr-auto">#}
+{#            <li class="nav-item active">#}
+{#              <a class="nav-link" href="{% url 'users:userhome' %}">首页 <span class="sr-only">(current)</span></a>#}
+{#            </li>#}
+{#            <li class="nav-item">#}
+{#              <a class="nav-link" href="{% url 'qa:new' %}">问答</a>#}
+{#            </li>#}
+{#            <li class="nav-item">#}
+{#              <a class="nav-link" href="{% url 'article:list' %}">文章</a>#}
+{#            </li>#}
+{#            <li class="nav-item">#}
+{#              <a class="nav-link" href="{% url 'circle:list' %}">圈子</a>#}
+{#            </li>#}
+{#            {% if request.user.is_authenticated %}#}
+{#              <li class="nav-item">#}
+                {# URL provided by django-allauth/account/urls.py #}
+{#                <a class="nav-link" href="{% url 'users:detail' request.user.username  %}">{% trans "My Profile" %}</a>#}
+{#              </li>#}
+{#              <li class="nav-item">#}
+                {# URL provided by django-allauth/account/urls.py #}
+{#                <a class="nav-link" href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>#}
+{#              </li>#}
+{#            {% else %}#}
+{#              <li class="nav-item">#}
+                {# URL provided by django-allauth/account/urls.py #}
+{#                <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>#}
+{#              </li>#}
+{#              <li class="nav-item">#}
+                {# URL provided by django-allauth/account/urls.py #}
+{#                <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% trans "Sign In" %}</a>#}
+{#              </li>#}
+{#            {% endif %}#}
+{#          </ul>#}
+{#        </div>#}
+{#      </nav>#}
+{#    </div>#}
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container">
+            <a class="navbar-brand" href="#">segmentfault</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'qa:new' %}">问答</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'article:list' %}">文章</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'circle:list' %}">圈子</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'msg:allletter' %}">私信</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'notice:all' %}">
+                    <i class="zi {% if request.user.is_authenticated and request.user.has_unread_notice %}zi_bells{% else %}zi_bell{% endif %}" zico="铃铛"></i>
+                  </a>
+                </li>
+
+                <li></li>
+              </ul>
+              <form class="form-inline my-2 my-lg-0" method="get" action="{% url 'haystack_search' %}">
+                <input class="form-control mr-sm-2" type="search" placeholder="全站搜索" aria-label="Search" name="q">
+                <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit"><i class="zi zi_searchBlack" zico="搜索粗黑"></i></button>
+              </form>
+              <p>&nbsp;&nbsp;&nbsp;</p>
+
+
+
+              {% if request.user.is_authenticated %}
+                <ul class="navbar-nav mr-auto">
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      {% thumbnail request.user.picture "40x40" crop="center" as im %}
+                      <img class="mr-3" src="{{ im.url }}" alt="Generic placeholder image">
+                      {% empty %}
+                      <img src="{% static 'img/user.png' %}" height="180px" alt="没有头像"/>
+                      {% endthumbnail %}
+                      {{ request.user }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item" href="{% url 'users:detail' request.user.username  %}"><i class="zi zi_useralt">  我的主页</i></a>
+                      <a class="dropdown-item" href="{% url 'msg:allletter' %}"><i class="zi zi_chat">  私信</i></a>
+                      <a class="dropdown-item" href="{% url 'notice:all' %}"><i class="zi zi_bell" zico="铃铛">  消息</i></a>
+                      <a class="dropdown-item" href="{% url 'account_logout' %}"><i class="zi zi_signoutalt" zico="出口标志">  注销</i></a>
+                    </div>
+                  </li>
+                </ul>
+
+              {% else %}
+                <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                  {# URL provided by django-allauth/account/urls.py #}
+                  <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
+                </li>
+                <li class="nav-item">
+                  {# URL provided by django-allauth/account/urls.py #}
+                  <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
+                </li>
+                </ul>
+              {% endif %}
+
+
+            </div>
+      </div>
+    </nav>
+<p></p>
+
+    <div class="container">
+
+
+      {% if messages %}
+          {% for message in messages %}
+              <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
+          {% endfor %}
+      {% endif %}
+
+      {% block content %}
+        <p>Use this document as a way to quick start any new project.</p>
+      {% endblock content %}
+
+    </div> <!-- /container -->
+
+    {% block modal %}{% endblock modal %}
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    {% block javascript %}
+      {% compress js %}
+      <!-- Bootstrap JS and its dependencies-->
+      <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+      <script src="{% static 'js/popper.min.js' %}"></script>
+      <script src="{% static 'bootstrap-4.3.1-dist/js/bootstrap.min.js' %}"></script>
+      {% endcompress %}
+      <!-- Your stuff: Third-party javascript libraries go here -->
+      
+
+      <!-- place project specific Javascript in this file -->
+
+
+
+
+    {% endblock javascript %}
+    <script type="text/javascript">
+      $.ajaxSetup({
+          data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+      });
+      const username = '{{ request.user }}'
+    </script>
+    <script src="{% static 'js/reconnecting-websocket.js' %}"></script>
+    <script src="{% static 'js/project.js' %}"></script>
+  </body>
+</html>
+ 

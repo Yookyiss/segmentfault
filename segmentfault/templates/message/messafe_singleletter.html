@@ -1,0 +1,15 @@
+{% load static thumbnail %}
+
+
+
+<div class="media">
+  {% thumbnail message.sender.picture "40x40" crop="center" as im %}
+  <img class="mr-3" src="{{ im.url }}" alt="Generic placeholder image">
+  {% empty %}
+  <img src="{% static 'img/user.png' %}" height="180px" alt="没有头像"/>
+  {% endthumbnail %}
+  <div class="media-body">
+    {{ message.message }}
+  </div>
+</div>
+<p></p>
