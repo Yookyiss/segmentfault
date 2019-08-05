@@ -21,7 +21,7 @@
     <div class="col-md-8">
       <div class="media">
         <div class="media-body">
-          <span style="color: #ccc;font-size: 15px"><a href="" style="color: #ccc">{{ q.user.name }}</a>&nbsp;&nbsp;&nbsp;&nbsp;提问于{{ q.create_time|timesince }}前</span>
+          <span style="color: #ccc;font-size: 15px"><a href="/users/{{ q.user.username }}" style="color: #ccc">{{ q.user.name }}</a>&nbsp;&nbsp;&nbsp;&nbsp;提问于{{ q.create_time|timesince }}前</span>
           <h5 class="mt-0"><a href="{% url 'qa:detail' q.id %}" style="color: black">{{ q.title|safe|truncatechars_html:20 }}</a></h5>
 
         </div>

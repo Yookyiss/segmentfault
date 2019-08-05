@@ -5,7 +5,8 @@
       {% empty %}
           <img src="{% static 'img/user.png' %}" height="180px" alt="没有头像"/>
       {% endthumbnail %}
-      <span style="color: black;">{{ circle.user.name }}</span>
+      <a href="/users/{{ circle.user.username }}"><span style="color: black;">{{ circle.user.name }}</span></a>
+
       {% if circle.user == request.user %}
       <p class="my-delete-circle move-hand"><span>删除</span></p>
       {% endif %}

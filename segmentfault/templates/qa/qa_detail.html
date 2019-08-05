@@ -45,7 +45,7 @@
   <div class="row">
     <div class="col-md-12">
       <a class="btn btn-primary" href="{% url "qa:reply" question.id %}" role="button">发表回复</a>
-      <span style="float: right;"><a href="#">{{ question.user.name }}</a>发布于{{ question.create_time }}</span>
+      <span style="float: right;"><a href="/users/{{ question.user }}">{{ question.user.name }}</a>发布于{{ question.create_time }}</span>
     </div>
   </div>
   {% include 'qa/qa_answer.html' %}

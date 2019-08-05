@@ -9,7 +9,10 @@
   <div class="row">
     <div class="col-sm-12">
       <h2>暂时使用简易版个人中心，V2.0版本会对其前端页面进行更新</h2>
+    {% if request.user.username == object.username %}
       <p>用户名：{{ object.username }}</p>
+    {% endif %}
+
       {% if object.name %}
         <p>昵称：{{ object.name }}</p>
         <p>城市：{{ object.city }}</p>
