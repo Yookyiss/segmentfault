@@ -176,7 +176,7 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-
+    <script src="{% static 'js/reconnecting-websocket.js' %}"></script>
     {% block javascript %}
       {% compress js %}
       <!-- Bootstrap JS and its dependencies-->
@@ -199,7 +199,6 @@
       });
       const username = '{{ request.user }}'
     </script>
-    <script src="{% static 'js/reconnecting-websocket.js' %}"></script>
     <script src="{% static 'js/project.js' %}"></script>
   </body>
 </html>
