@@ -82,7 +82,7 @@ CELERY_BEAT_SCHEDULE = {
     },
     'remind_message': {
         'task': 'segmentfault.apps.users.tasks.message_remind',
-        'schedule': timedelta(seconds=10)  # 每2天执行一次
+        'schedule': timedelta(days=2)  # 每2天执行一次
     },
 }
 # -------------------------------------
