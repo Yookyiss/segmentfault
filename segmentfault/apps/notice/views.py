@@ -6,10 +6,12 @@ from django.http.response import JsonResponse
 from channels.layers import get_channel_layer
 from segmentfault.apps.notice.models import Notice
 from segmentfault.apps.users.models import User
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 # Create your views here.
 
 
-class AllNoticeList(ListView):
+class AllNoticeList(LoginRequiredMixin,ListView):
     """
     所有消息
     """
