@@ -5,6 +5,7 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
 from django.shortcuts import redirect,reverse
+from http import HTTPStatus
 
 
 def home_redirect(request):
@@ -60,4 +61,7 @@ if settings.DEBUG:
 
         urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns
 
+def RESPONSE_500(request):
+    return HTTPStatus(500)
 
+handler500 = RESPONSE_500
